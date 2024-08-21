@@ -1,0 +1,38 @@
+{
+  "name": "@puya/ts",
+  "version": "1.0.0",
+  "description": "This library provides timestamp and supports custom templates for its output file.",
+  "main": "index.js",
+  "bin": {
+    "ts": "bin/ts"
+  },
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/puyacodes/ts.git"
+  },
+  "keywords": [
+    "puya",
+    "ts",
+    "timestamp",
+    "puyacodes",
+    "puyasoft"
+  ],
+  "author": "PuyaSoft",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/puyacodes/ts/issues"
+  },
+  "homepage": "https://github.com/puyacodes/ts#readme",
+  "dependencies": {
+    "jalali-moment": "^3.3.11"
+  },
+  "files": [
+    "test.js",
+    "Timestamper.js",
+    "TimestamperCLI.js",
+    "bin/ts"
+  ]
+}

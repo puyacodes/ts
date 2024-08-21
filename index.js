@@ -1,4 +1,5 @@
 const { ts } = require('./Timestamper')
-//const cli = require('./TimestamperCLI');
+const cli = require('./TimestamperCLI');
 
-module.exports = ts;
+module.exports.Timestamper = ts;
+module.exports.TimestamperCLI = TimestamperCLI;

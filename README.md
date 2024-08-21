@@ -84,7 +84,7 @@ ts [options]
 You can also use Timestamper as a module in your Node.js projects.
 
 ```javascript
-const timestamper = require('ts');
+const { ts, version, TimestampError } = require('ts');
 
 const result = timestamper({
     locale: 'en',

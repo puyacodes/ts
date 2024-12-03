@@ -1,6 +1,6 @@
 {
   "name": "@puya/ts",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "This library provides timestamp and supports custom templates for its output file.",
   "main": "index.js",
   "bin": {

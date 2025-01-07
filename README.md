@@ -119,3 +119,16 @@ if (result.success) {
     console.error('Failed to generate timestamp:', result.err);
 }
 ```
+
+### Variables
+
+You can pass this variables:
+```javascript
+  locale: "en", // or "fa"
+  outputFileName: "output.json", //file will created at current dir
+  templatePath: "", //template file path 
+  format: "YYYYMMDDHHmm", //timestamp format
+  inlineTemplate: "", //inline template (without path)
+  skipOutput: false
+```
+

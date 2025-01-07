@@ -1,13 +1,13 @@
 {
   "name": "@puya/ts",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "This library provides timestamp and supports custom templates for its output file.",
   "main": "index.js",
   "bin": {
     "ts": "bin/ts"
   },
   "scripts": {
-    "test": "node test.js"
+    "test": "node run.js"
   },
   "repository": {
     "type": "git",
@@ -30,7 +30,7 @@
     "jalali-moment": "^3.3.11"
   },
   "files": [
-    "test.js",
+    "run.js",
     "Timestamper.js",
     "TimestamperCLI.js",
     "bin/ts"

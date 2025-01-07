@@ -12,7 +12,8 @@ let default_options = {
   templatePath: "",
   format: "YYYYMMDDHHmm",
   inlineTemplate: "",
-  hasInlineTemplate: false
+  hasInlineTemplate: false,
+  skipOutput: false
 };
 
 class TimestampError extends Error {
@@ -42,9 +43,12 @@ function start(args) {
       const ts = generateTimestamp(options.locale, options.format);
       const data = generateData(ts, result.options);
     
-      writeOutput(data, result.options.outPutFilePath);
+      if (!options.skipOutput) {
+        writeOutput(data, result.options.outPutFilePath);
+      }
       
       result.success = true;
+      result.data = data;
     }
   } catch (ex) {
     if (ex instanceof TimestampError) {
@@ -93,6 +97,9 @@ function parseArguments(args) {
         default_options.format = args[i + 1];
         i += 2;
         break;
+      case '-so':
+        default_options.skipOutput = true;
+        break;
       case '-i':
         default_options.inlineTemplate = args[i + 1];
         default_options.template = default_options.inlineTemplate;
@@ -110,6 +117,10 @@ function parseArguments(args) {
 function validateOptions(options) {
   const fileRegex = /^[\w,-]+\.[A-Za-z]{1,15}$/;
 
+  if (options.skipOutput && !options.outPutFilePath) {
+    throw new TimestampError("confused", `Please make up your mind buddy. Do you want me to generate the output for you or not?`);
+  }
+
   Object.entries(options).forEach(([key, value]) => {
     if (value === undefined) {
       throw new TimestampError(`${key}_required`, `${key} is required after -${key.slice(0, 1)}`);
@@ -125,7 +136,6 @@ function validateOptions(options) {
   }
 
   if (!isValidDateFormat(options.format)) {
-
     throw new TimestampError("invalid_format", `Please enter a valid format.`);
   }
 

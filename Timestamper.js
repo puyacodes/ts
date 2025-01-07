@@ -115,7 +115,7 @@ function parseArguments(args) {
 }
 
 function validateOptions(options) {
-  const fileRegex = /^[\w,-]+\.[A-Za-z]{1,15}$/;
+  // const fileRegex = /^[\w,-]+\.[A-Za-z]{1,15}$/;
 
   if (options.skipOutput && !options.outPutFilePath) {
     throw new TimestampError("confused", `Please make up your mind buddy. Do you want me to generate the output for you or not?`);
@@ -127,9 +127,9 @@ function validateOptions(options) {
     }
   });
 
-  if (!fileRegex.test(path.basename(options.outPutFilePath))) {
-    throw new TimestampError("invalid_filename", `Please enter a valid file name.`);
-  }
+  // if (!fileRegex.test(path.basename(options.outPutFilePath))) {
+  //   throw new TimestampError("invalid_filename", `Please enter a valid file name.`);
+  // }
 
   if (options.templatePath && !fs.existsSync(options.templatePath)) {
     throw new TimestampError("template_not_exists", `Template file does not exist.`);

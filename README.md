@@ -84,12 +84,12 @@ ts [options]
 You can also use Timestamper as a module in your Node.js projects.
 
 ```javascript
-const { ts, version, TimestampError } = require('ts');
+const { Timestamper } = require('@puya/ts');
 
-const result = timestamper({
+const result = Timestamper({
     locale: 'en',
     outputFileName: 'result.json',
-    template: '{ "ts": "{ts}" }',
+    template: '{ "hash": "{ts}" }',
     format: 'YYYYMMDDHHmmss',
 });
 

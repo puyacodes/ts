@@ -6,12 +6,13 @@ Timestamper v${version}
   Usage: ts [options]
 
   Options:
-    -v  --version         version
-    -l  --locale          locale to use for formatting the date/time. e.g. 'en' or 'fa' (default = en).
-    -o  --output          output file name where the result will be saved. default is info.json.
-    -t  --template        template file.
-    -f  --format          format string to use for formatting the date/time. default is "YYYYMMDDHHmm".
-    -i  --inline-template inline template string.
+    -v         version
+    -l         locale to use for formatting the date/time. e.g. 'en' or 'fa' (default = en).
+    -o         output file name where the result will be saved. default is info.json.
+    -t         template file.
+    -f         format string to use for formatting the date/time. default is "YYYYMMDDHHmm".
+    -i         inline template string.
+    -so        skip generating output file.
 
   Examples:
     ts
@@ -31,7 +32,9 @@ function TimestamperCLI(args) {
     const result = ts(args);
 
     if (result.success) {
-      console.log(`File ${result.options.outputFileName} generated at ${result.options.outPutFilePath}`);
+      if (result.options.version !== true) {
+        console.log(`File ${result.options.outputFileName} generated at ${result.options.outPutFilePath}`);
+      }
     } else {
       if (result.err) {
         throw result.err;

@@ -45,6 +45,7 @@ ts [options]
 - `-o [outputfile]`: The name of the output file where the result will be saved. Default is `info.json`.
 - `-t [template]`: The path to a template file.
 - `-f [format]`: The format string to use for formatting the date/time. Default is `YYYYMMDDHHmm`.
+- `-so`: skip generating output file.
 - `-i [inline-template]`: Inline template string.
 
 #### Examples
@@ -83,6 +84,7 @@ ts [options]
 
 You can also use Timestamper as a module in your Node.js projects.
 
+Example 1.
 ```javascript
 const { Timestamper } = require('@puya/ts');
 
@@ -90,11 +92,29 @@ const result = Timestamper({
     locale: 'en',
     outputFileName: 'result.json',
     template: '{ "hash": "{ts}" }',
-    format: 'YYYYMMDDHHmmss',
+    format: 'YYYYMMDDHHmmss'
 });
 
 if (result.success) {
-    console.log('Timestamp generated successfully:', result.output);
+    console.log(`Timestamp "result.json" generated successfully`);
+} else {
+    console.error('Failed to generate timestamp:', result.err);
+}
+```
+
+Example 2. No output
+```javascript
+const { Timestamper } = require('@puya/ts');
+
+const result = Timestamper({
+    locale: 'en',
+    skipOutput: true,
+    template: '{ "hash": "{ts}" }',
+    format: 'YYYYMMDDHHmmss'
+});
+
+if (result.success) {
+    console.log('Timestamp: ', result.data);
 } else {
     console.error('Failed to generate timestamp:', result.err);
 }

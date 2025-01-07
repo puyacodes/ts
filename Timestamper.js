@@ -1,8 +1,9 @@
 const path = require("path");
 const fs = require("fs");
 const moment = require("jalali-moment");
+const package = require('./package.json');
 
-const version = '1.0.0';
+const version = package.version;
 
 let default_options = {
   locale: "en",
@@ -40,15 +41,21 @@ function start(args) {
     if (result.state === "successful") {
       result.options = Object.assign(default_options, options);
       
-      const ts = generateTimestamp(options.locale, options.format);
-      const data = generateData(ts, result.options);
-    
-      if (!options.skipOutput) {
-        writeOutput(data, result.options.outPutFilePath);
+      if (default_options.version === true) {
+        console.log(version);
+      } else {
+        
+        const ts = generateTimestamp(options.locale, options.format);
+        const data = generateData(ts, result.options);
+      
+        if (!options.skipOutput) {
+          writeOutput(data, result.options.outPutFilePath);
+        }
+
+        result.data = data;
       }
       
       result.success = true;
-      result.data = data;
     }
   } catch (ex) {
     if (ex instanceof TimestampError) {
@@ -99,12 +106,17 @@ function parseArguments(args) {
         break;
       case '-so':
         default_options.skipOutput = true;
+        i++;
         break;
       case '-i':
         default_options.inlineTemplate = args[i + 1];
         default_options.template = default_options.inlineTemplate;
         default_options.hasInlineTemplate = true;
         i += 2;
+        break;
+        case '-v':
+          default_options.version = true;
+          i++;
         break;
       default:
         throw new Error(`Invalid argument provided: ${args[i]}`);
@@ -117,38 +129,40 @@ function parseArguments(args) {
 function validateOptions(options) {
   // const fileRegex = /^[\w,-]+\.[A-Za-z]{1,15}$/;
 
-  if (options.skipOutput && !options.outPutFilePath) {
-    throw new TimestampError("confused", `Please make up your mind buddy. Do you want me to generate the output for you or not?`);
-  }
-
-  Object.entries(options).forEach(([key, value]) => {
-    if (value === undefined) {
-      throw new TimestampError(`${key}_required`, `${key} is required after -${key.slice(0, 1)}`);
+  if (options.version !== true) {
+    if (options.skipOutput && !options.outPutFilePath) {
+      throw new TimestampError("output_confusion", `Please make up your mind buddy. Do you want me to generate the output for you or not?`);
     }
-  });
-
-  // if (!fileRegex.test(path.basename(options.outPutFilePath))) {
-  //   throw new TimestampError("invalid_filename", `Please enter a valid file name.`);
-  // }
-
-  if (options.templatePath && !fs.existsSync(options.templatePath)) {
-    throw new TimestampError("template_not_exists", `Template file does not exist.`);
-  }
-
-  if (!isValidDateFormat(options.format)) {
-    throw new TimestampError("invalid_format", `Please enter a valid format.`);
-  }
-
-  if (options.inlineTemplate !== "") {
-    options.hasInlineTemplate = true;
-  }
-
-  if (options.hasInlineTemplate && options.inlineTemplate === "") {
-    throw new TimestampError("invalid_inline_template", `Please provide a valid inline template.`);
-  }
-
-  if (options.templatePath && options.inlineTemplate != "") {
-    throw new TimestampError("extra_template", `You can use only one template.`);
+  
+    Object.entries(options).forEach(([key, value]) => {
+      if (value === undefined) {
+        throw new TimestampError(`${key}_required`, `${key} is required after -${key.slice(0, 1)}`);
+      }
+    });
+  
+    // if (!fileRegex.test(path.basename(options.outPutFilePath))) {
+    //   throw new TimestampError("invalid_filename", `Please enter a valid file name.`);
+    // }
+  
+    if (options.templatePath && !fs.existsSync(options.templatePath)) {
+      throw new TimestampError("template_not_exists", `Template file does not exist.`);
+    }
+  
+    if (!isValidDateFormat(options.format)) {
+      throw new TimestampError("invalid_format", `Please enter a valid format.`);
+    }
+  
+    if (options.inlineTemplate !== "") {
+      options.hasInlineTemplate = true;
+    }
+  
+    if (options.hasInlineTemplate && options.inlineTemplate === "") {
+      throw new TimestampError("invalid_inline_template", `Please provide a valid inline template.`);
+    }
+  
+    if (options.templatePath && options.inlineTemplate != "") {
+      throw new TimestampError("extra_template", `You can use only one template.`);
+    }
   }
 
   return "successful";

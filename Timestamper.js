@@ -1,9 +1,9 @@
 const path = require("path");
 const fs = require("fs");
 const moment = require("jalali-moment");
-const package = require('./package.json');
+const _package = require('./package.json');
 
-const version = package.version;
+const version = _package.version;
 
 let default_options = {
   locale: "en",
@@ -31,30 +31,30 @@ function start(args) {
 
   try {
     const options = Array.isArray(args) ? parseArguments(args) : args;
-  
+
     if (args.length !== 0) {
       result.state = validateOptions(Object.assign(default_options, options));
     } else {
       result.state = "successful";
     }
-  
+
     if (result.state === "successful") {
       result.options = Object.assign(default_options, options);
-      
+
       if (default_options.version === true) {
         console.log(version);
       } else {
-        
+
         const ts = generateTimestamp(options.locale, options.format);
         const data = generateData(ts, result.options);
-      
+
         if (!options.skipOutput) {
           writeOutput(data, result.options.outPutFilePath);
         }
 
         result.data = data;
       }
-      
+
       result.success = true;
     }
   } catch (ex) {
@@ -114,9 +114,9 @@ function parseArguments(args) {
         default_options.hasInlineTemplate = true;
         i += 2;
         break;
-        case '-v':
-          default_options.version = true;
-          i++;
+      case '-v':
+        default_options.version = true;
+        i++;
         break;
       default:
         throw new Error(`Invalid argument provided: ${args[i]}`);
@@ -133,33 +133,33 @@ function validateOptions(options) {
     if (options.skipOutput && !options.outPutFilePath) {
       throw new TimestampError("output_confusion", `Please make up your mind buddy. Do you want me to generate the output for you or not?`);
     }
-  
+
     Object.entries(options).forEach(([key, value]) => {
       if (value === undefined) {
         throw new TimestampError(`${key}_required`, `${key} is required after -${key.slice(0, 1)}`);
       }
     });
-  
+
     // if (!fileRegex.test(path.basename(options.outPutFilePath))) {
     //   throw new TimestampError("invalid_filename", `Please enter a valid file name.`);
     // }
-  
+
     if (options.templatePath && !fs.existsSync(options.templatePath)) {
       throw new TimestampError("template_not_exists", `Template file does not exist.`);
     }
-  
+
     if (!isValidDateFormat(options.format)) {
       throw new TimestampError("invalid_format", `Please enter a valid format.`);
     }
-  
+
     if (options.inlineTemplate !== "") {
       options.hasInlineTemplate = true;
     }
-  
+
     if (options.hasInlineTemplate && options.inlineTemplate === "") {
       throw new TimestampError("invalid_inline_template", `Please provide a valid inline template.`);
     }
-  
+
     if (options.templatePath && options.inlineTemplate != "") {
       throw new TimestampError("extra_template", `You can use only one template.`);
     }
@@ -172,7 +172,7 @@ function generateTimestamp(locale, format) {
   return moment().locale(locale).format(format);
 }
 
-function generateData(ts, {template, templatePath, inlineTemplate, hasInlineTemplate}) {
+function generateData(ts, { template, templatePath, inlineTemplate, hasInlineTemplate }) {
   let data;
 
   if (hasInlineTemplate) {
